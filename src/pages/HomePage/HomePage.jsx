@@ -12,6 +12,7 @@ const HomePage = ({ movies }) => {
               className={style.link}
               key={movie.id}
               to={`/movies/${movie.id}`}
+              state={{ from: "/" }} // Передаем информацию о предыдущей странице
             >
               {movie.title}
             </Link>

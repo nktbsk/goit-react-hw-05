@@ -30,7 +30,6 @@ const App = () => {
         console.log(error);
       });
   }, []);
-
   return (
     <>
       <Header />
@@ -45,7 +44,7 @@ const App = () => {
             <Route path="cast" element={<MovieCast />} />
             <Route path="reviews" element={<MovieReviews />} />
           </Route>
-          <Route path="/not-found-page" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </>

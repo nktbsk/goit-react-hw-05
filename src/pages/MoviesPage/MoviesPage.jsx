@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useSearchParams, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState(searchParams.get("query") || "");
+  const location = useLocation(); // текущий маршрут
 
   useEffect(() => {
     if (query) {
@@ -51,7 +51,11 @@ const MoviesPage = () => {
 
       <div>
         {movies.map((movie) => (
-          <Link to={`/movies/${movie.id}`} key={movie.id}>
+          <Link
+            to={`/movies/${movie.id}`}
+            key={movie.id}
+            state={{ from: location }} // сохраняем текущее местоположение
+          >
             {movie.title}
           </Link>
         ))}
