@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import style from "./MoviesPage.module.css";
 
 const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState(searchParams.get("query") || "");
-  const location = useLocation(); // текущий маршрут
+  const location = useLocation();
 
   useEffect(() => {
     if (query) {
@@ -38,23 +39,27 @@ const MoviesPage = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSearch}>
+    <div className={style.container}>
+      <form className={style.form} onSubmit={handleSearch}>
         <input
+          className={style.input}
           type="text"
           name="searchInput"
           placeholder="Поиск фильмов..."
           defaultValue={query}
         />
-        <button type="submit">Искать</button>
+        <button className={style.btn} type="submit">
+          Search
+        </button>
       </form>
 
-      <div>
+      <div className={style.wrapper}>
         {movies.map((movie) => (
           <Link
+            className={style.link}
             to={`/movies/${movie.id}`}
             key={movie.id}
-            state={{ from: location }} // сохраняем текущее местоположение
+            state={{ from: location }}
           >
             {movie.title}
           </Link>

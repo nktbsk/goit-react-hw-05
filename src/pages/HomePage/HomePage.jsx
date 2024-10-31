@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const HomePage = ({ movies }) => {
   return (
-    <>
+    <div className={style.container}>
       <h1 className={style.title}>Trending Today</h1>
       <div className={style.wrapper}>
         {movies &&
@@ -18,7 +18,7 @@ const HomePage = ({ movies }) => {
             </Link>
           ))}
       </div>
-    </>
+    </div>
   );
 };
 

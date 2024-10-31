@@ -2,19 +2,37 @@ import {
   useParams,
   useLocation,
   useNavigate,
-  Link,
+  NavLink,
   Outlet,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import style from "./MovieDetailsPage.module.css";
+import clsx from "clsx";
 
 const MovieDetailsPage = ({ movies }) => {
   const { movieId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
+  const [genres, setGenres] = useState([]); // состояние для жанров
 
+  // Запрос для получения всех жанров
+  useEffect(() => {
+    axios
+      .get("https://api.themoviedb.org/3/genre/movie/list", {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZWZmZDczNTgyNWRkZjM5MDBjMDZlOGJjZjhmMTlmZSIsIm5iZiI6MTczMDI4MjQ2Ny4wODY0OTA5LCJzdWIiOiI2NzE4YWMyOTI3YmQ1N2Q5MWY2MjFjZWQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.qX7aLZ_Vb3dMm60DhbteGJHM1Hfppq8N2FFagwWRIdU`,
+        },
+        params: {
+          language: "en-US",
+        },
+      })
+      .then((response) => setGenres(response.data.genres))
+      .catch((error) => console.error("Ошибка при загрузке жанров:", error));
+  }, []);
+
+  // Запрос фильма
   useEffect(() => {
     const foundMovie = movies.find((m) => m.id === parseInt(movieId));
     if (foundMovie) {
@@ -35,11 +53,19 @@ const MovieDetailsPage = ({ movies }) => {
     }
   }, [movieId, movies]);
 
+  // Функция для получения названий жанров
+  const getGenreNames = (genreIds) => {
+    return genreIds
+      .map((id) => genres.find((genre) => genre.id === id)?.name)
+      .filter(Boolean)
+      .join(", ");
+  };
+
   const handleGoBack = () => {
     if (location.state?.from) {
-      navigate(location.state.from); // Возвращаем на предыдущую страницу
+      navigate(location.state.from);
     } else {
-      navigate("/movies"); // Если откуда не пришли, возвращаем на страницу фильмов
+      navigate("/movies");
     }
   };
 
@@ -48,11 +74,11 @@ const MovieDetailsPage = ({ movies }) => {
   }
 
   return (
-    <div>
-      <button type="button" onClick={handleGoBack}>
+    <div className={style.container}>
+      <button className={style.btn} type="button" onClick={handleGoBack}>
         Go back
       </button>
-      <h1>{movie.title}</h1>
+      <h2 className={style.title}>{movie.title}</h2>
       <div className={style.wrapper}>
         <img
           className={style.img}
@@ -60,26 +86,44 @@ const MovieDetailsPage = ({ movies }) => {
           alt={movie.title}
         />
         <div className={style.info}>
-          <p>{movie.overview}</p>
-          <p>Рейтинг: {movie.vote_average}</p>
-          <p>Дата выхода: {movie.release_date}</p>
-          <p>
-            Жанры:{" "}
-            {Array.isArray(movie.genres)
-              ? movie.genres.map((genre) => genre.name).join(", ")
-              : "Нет данных о жанрах."}
+          <h3 className={style.subtitle}>Overview</h3>
+          <p className={style.text}>{movie.overview}</p>
+          <h3 className={style.subtitle}>Info</h3>
+          <p className={style.text}>
+            <span className={style.span}>Rating:</span> {movie.vote_average}
           </p>
-          <p>Оригинальный язык: {movie.original_language}</p>
+          <p className={style.text}>
+            <span className={style.span}>Release date:</span>{" "}
+            {movie.release_date}
+          </p>
+          <p className={style.text}>
+            <span className={style.span}>Genres:</span>{" "}
+            {getGenreNames(movie.genre_ids || [])}
+          </p>
+          <p className={style.text}>
+            <span className={style.span}>Original language:</span>{" "}
+            {movie.original_language}
+          </p>
         </div>
       </div>
-      <ul>
-        <li>
-          <Link to={`/movies/${movie.id}/cast`}>Cast</Link>
-        </li>
-        <li>
-          <Link to={`/movies/${movie.id}/reviews`}>Reviews</Link>
-        </li>
-      </ul>
+      <div className={style.wrapperLink}>
+        <NavLink
+          className={({ isActive }) =>
+            clsx(style.link, isActive && style.active)
+          }
+          to={`/movies/${movie.id}/cast`}
+        >
+          Cast
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            clsx(style.link, isActive && style.active)
+          }
+          to={`/movies/${movie.id}/reviews`}
+        >
+          Reviews
+        </NavLink>
+      </div>
       <Outlet />
     </div>
   );

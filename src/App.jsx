@@ -11,7 +11,6 @@ import MovieReviews from "./components/MovieReviews/MovieReviews";
 
 const App = () => {
   const [movie, setMovie] = useState([]);
-
   useEffect(() => {
     axios
       .get("https://api.themoviedb.org/3/movie/popular", {

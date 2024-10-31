@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./MovieCast.module.css"; // Добавьте стили для кастинга
-
+import style from "./MovieCast.module.css";
 const MovieCast = () => {
   const { movieId } = useParams();
   const [cast, setCast] = useState([]);
@@ -26,20 +25,20 @@ const MovieCast = () => {
   }, [movieId]);
 
   return (
-    <div className={styles.castContainer}>
+    <div className={style.container}>
       {cast.length > 0 ? (
         cast.map((actor) => (
-          <div key={actor.cast_id} className={styles.actorCard}>
+          <div key={actor.cast_id} className={style.actorCard}>
             <img
+              className={style.img}
               src={
                 actor.profile_path
                   ? `https://image.tmdb.org/t/p/w200${actor.profile_path}`
                   : "https://via.placeholder.com/200x300?text=No+Image"
               }
               alt={actor.name}
-              className={styles.actorImage}
             />
-            <p className={styles.actorName}>{actor.name}</p>
+            <p className={style.name}>{actor.name}</p>
           </div>
         ))
       ) : (
