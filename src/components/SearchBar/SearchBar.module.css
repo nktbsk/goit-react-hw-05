@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.input {
+  background-color: #fffbea;
+  width: 270px;
+  height: 40px;
+  border-radius: 5px;
+  outline: none;
+}
+.input:focus,
+.input:hover,
+.input:active {
+  background-color: #fffbea;
+}
+
+.btn {
+  background-color: #fffbea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #b26cc4;
+  border-radius: 5px;
+  color: #b26cc4;
+  width: 100px;
+  height: 40px;
+  transition: all 0.25s ease;
+}
+.btn:hover {
+  border-color: #ffe366;
+  background-color: #ffe366;
+  transition: 0.3s;
+}

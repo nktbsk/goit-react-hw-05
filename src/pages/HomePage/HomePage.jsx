@@ -1,25 +1,34 @@
+import { useEffect, useState } from "react";
+import { searchMovie } from "../../api";
+import MovieList from "../../components/MovieList/MovieList";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import style from "./HomePage.module.css";
-import { Link } from "react-router-dom";
 
-const HomePage = ({ movies }) => {
+export default function HomePage() {
+  const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!movies) {
+      return "Is Loading ...";
+    }
+    const getData = async () => {
+      setError(false);
+      try {
+        const data = await searchMovie();
+        setMovies(data.results);
+      } catch (error) {
+        setError(true);
+      }
+    };
+    getData();
+  }, []);
+
   return (
     <div className={style.container}>
       <h1 className={style.title}>Trending Today</h1>
-      <div className={style.wrapper}>
-        {movies &&
-          movies.map((movie) => (
-            <Link
-              className={style.link}
-              key={movie.id}
-              to={`/movies/${movie.id}`}
-              state={{ from: "/" }} // Передаем информацию о предыдущей странице
-            >
-              {movie.title}
-            </Link>
-          ))}
-      </div>
+      {error && <ErrorMessage />}
+      {movies.length > 0 && <MovieList movies={movies} />}
     </div>
   );
-};
-
-export default HomePage;
+}

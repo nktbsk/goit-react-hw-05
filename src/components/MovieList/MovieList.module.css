@@ -1,0 +1,36 @@
+.movieList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.movieItem {
+  width: 180px;
+  height: 305px;
+  text-align: center;
+  border: 10px solid #ffe366;
+  border-radius: 5px;
+  background-color: #ffe366;
+  transition: transform 0.5s ease;
+}
+.movieLink {
+  text-decoration: none;
+  width: 100%;
+}
+.movieImage {
+}
+.movieTitle {
+  color: black;
+  margin-top: 5px;
+  height: 40px;
+  text-align: center; /* Центрирование текста */
+  overflow: hidden; /* Скрыть лишний текст */
+  display: -webkit-box; /* Для поддержки webkit-браузеров */
+  -webkit-line-clamp: 2; /* Ограничить текст двумя строками */
+  -webkit-box-orient: vertical; /* Вертикальная ориентация для webkit */
+  line-height: 1.2;
+}
+.movieItem:hover {
+  transform: scale(1.1);
+}
